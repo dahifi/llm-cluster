@@ -50,7 +50,7 @@ def register_commands(cli):
         Pass --summary to generate a summary for each cluster, using the default
         language model or the model you specify with --model.
         """
-        from llm.cli import get_default_model, get_key
+        from llm.cli import get_default_model
 
         clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=n, n_init="auto")
         if database:
@@ -93,8 +93,6 @@ def register_commands(cli):
         # Do we need to generate summaries?
         if summary:
             model = llm.get_model(model or get_default_model())
-            if model.needs_key:
-                model.key = get_key("", model.needs_key, model.key_env_var)
             prompt = prompt or DEFAULT_SUMMARY_PROMPT
             click.echo("[")
             for cluster, is_last in zip(
